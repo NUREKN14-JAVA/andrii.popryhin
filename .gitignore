@@ -14,6 +14,9 @@ hs_err_pid*
 # Target, bin and settings
 target*
 bin*
+backup*
+.metadata
+.Rhistory
 .settings*
 .classpath
 .project
