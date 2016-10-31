@@ -82,16 +82,16 @@ class HsqldbUserDao implements UserDao {
 			int n = statement.executeUpdate();
 			if(n != 1)
 			{
-				throw new DatabaseException("Number of updated rows: " + n);
+				throw new DatabaseException("update failed - number of updated rows: " + n);
 			}
 		}
-		catch(DatabaseException de)
+		catch(DatabaseException e)
 		{
-			throw de;
+			throw e;
 		}
-		catch(SQLException sqle)
+		catch(SQLException e)
 		{
-			throw new DatabaseException(sqle);
+			throw new DatabaseException(e);
 		}
 	}
 
@@ -105,7 +105,7 @@ class HsqldbUserDao implements UserDao {
 			int n = statement.executeUpdate();
 			if(n != 1)
 			{
-				throw new DatabaseException("Number of deleted rows: " + n);
+				throw new DatabaseException("delete failed - number of deleted rows: " + n);
 			}
 		}
 		catch(DatabaseException e)
@@ -135,13 +135,13 @@ class HsqldbUserDao implements UserDao {
 				user.setDateOfBirthd(resultSet.getDate(4));
 			}
 		}
-		catch(DatabaseException de)
+		catch(DatabaseException e)
 		{
-			throw de;
+			throw e;
 		}
-		catch(SQLException sqle)
+		catch(SQLException e)
 		{
-			throw new DatabaseException(sqle);
+			throw new DatabaseException(e);
 		}
 		return user;
     }
