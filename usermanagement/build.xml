@@ -1,6 +1,5 @@
 <project name="usermanagement" basedir="." default="test">
 	
-	
 	<property name="main-java-dir" value="${basedir}/src/main/java"/>
 	<property name="test-java-dir" value="${basedir}/src/test/java"/>
 	<property name="build-dir" value="${basedir}/bin"/>
@@ -9,27 +8,28 @@
 		<delete dir="${build-dir}"/>
 	</target>
 	
-    <target name="init">
-            <mkdir dir="${build-dir}"/>
-    </target>
-	
-	<target name="compile" depends="init">
-		<javac srcdir="${main-java-dir}" destdir="${build-dir}"/>
+	<target name="init">
+		<mkdir dir="${build-dir}"/>
 	</target>
 	
-    <target name="test-compile">
-    	<javac srcdir="${test-java-dir}" destdir="${build-dir}"/>
-    </target>
-
-
+	<target name="compile" depends="init">
+		<javac srcdir="${main-java-dir}" destdir="${build-dir}" />
+	</target>
+	
+	<target name="test-compile">
+		<javac srcdir="${test-java-dir}" destdir="${build-dir}" />
+	</target>
+	
 	<target name="test" depends="test-compile">
-        <junit>
-        	<classpath>
-        		<pathelement location="${build-dir}"/>
-        	</classpath>
-        	<formatter type="plain"/>
-        	<test name="kn145.poprygin.UserTest"></test>
-        </junit>    
-    </target>
-
+		<junit>
+			<classpath>
+				<pathelement location="${build-dir}"/>
+			</classpath>
+			<formatter type="plain"/>
+			<test name="kn145.poprygin.UserTest"></test>
+			<test name="kn145.poprygin.db.DaoFactoryTest"></test>
+			<test name="kn145.poprygin.db.HsqldbUserDaoTest"></test>
+		</junit>	
+		
+	</target>
 </project>
