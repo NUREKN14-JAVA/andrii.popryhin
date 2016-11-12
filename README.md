@@ -10,4 +10,4 @@
 
 ### What have I discovered? 
 
-* Java's .jar libs are stored in '''/usr/share/java/'''
+* Java's .jar libs are stored in '/usr/share/java/'
