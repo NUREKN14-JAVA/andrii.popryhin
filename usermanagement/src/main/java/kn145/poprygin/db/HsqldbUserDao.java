@@ -19,17 +19,17 @@ class HsqldbUserDao implements UserDao {
 	private static final String SELECT_ALL_QUERY = "SELECT id, firstname, lastname, dateofbirth FROM users";
 	private static final String INSERT_QUERY = "INSERT INTO users (firstname, lastname, dateofbirth) VALUES (?,?,?)";
 	private static final String UPDATE_QUERY = "UPDATE users SET firstname=?, lastname=?, dateofbirth=? WHERE id=?";
-    private static final String DELETE_QUERY = "DELETE FROM users WHERE id = ?";
-    private static final String SELECT_QUERY = "SELECT id, firstname, lastname, dateofbirth FROM users WHERE id=?";
+	private static final String DELETE_QUERY = "DELETE FROM users WHERE id = ?";
+	private static final String SELECT_QUERY = "SELECT id, firstname, lastname, dateofbirth FROM users WHERE id=?";
 	private ConnectionFactory connectionFactory;
-	
+
 	public HsqldbUserDao() {
 	}
-	
+
 	public HsqldbUserDao(ConnectionFactory connectionFactory) {
 		this.connectionFactory = connectionFactory;
 	}
-	
+
 	public ConnectionFactory getConnectionFactory() {
 		return connectionFactory;
 	}
@@ -38,8 +38,6 @@ class HsqldbUserDao implements UserDao {
 		this.connectionFactory = connectionFactory;
 	}
 
-
-
 	public User create(User user) throws DatabaseException {
 		try {
 			Connection connection = connectionFactory.createConnection();
@@ -47,12 +45,30 @@ class HsqldbUserDao implements UserDao {
 					.prepareStatement(INSERT_QUERY);
 			statement.setString(1, user.getFirstName());
 			statement.setString(2, user.getLastName());
-			statement.setDate(3, new Date(user.getDateOfBirthd().getTime())); /* ADDED (java.sql.Date) because of an error with setDate() */
+			statement.setDate(3, new Date(user.getDateOfBirthd().getTime())); /*
+																			 * ADDED
+																			 * (
+																			 * java
+																			 * .
+																			 * sql
+																			 * .
+																			 * Date
+																			 * )
+																			 * because
+																			 * of
+																			 * an
+																			 * error
+																			 * with
+																			 * setDate
+																			 * (
+																			 * )
+																			 */
 			int n = statement.executeUpdate();
 			if (n != 1) {
 				throw new DatabaseException("Number of the inserted rows: " + n);
 			}
-			CallableStatement callableStatement = connection.prepareCall("call IDENTITY()");
+			CallableStatement callableStatement = connection
+					.prepareCall("call IDENTITY()");
 			ResultSet keys = callableStatement.executeQuery();
 			if (keys.next()) {
 				user.setId(new Long(keys.getLong(1)));
@@ -62,93 +78,79 @@ class HsqldbUserDao implements UserDao {
 			statement.close();
 			connection.close();
 			return user;
-		} catch (DatabaseException e) { 
+		} catch (DatabaseException e) {
 			throw e;
 		} catch (SQLException e) {
 			throw new DatabaseException(e);
 		}
 	}
 
-		
 	public void update(User user) throws DatabaseException {
-		try
-		{
+		try {
 			Connection connection = this.connectionFactory.createConnection();
-			PreparedStatement statement = connection.prepareStatement(this.UPDATE_QUERY);
+			PreparedStatement statement = connection
+					.prepareStatement(this.UPDATE_QUERY);
 			statement.setString(1, user.getFirstName());
 			statement.setString(2, user.getLastName());
 			statement.setDate(3, new Date(user.getDateOfBirthd().getTime()));
 			statement.setLong(4, new Long(user.getId()));
 			int n = statement.executeUpdate();
-			if(n != 1)
-			{
-				throw new DatabaseException("update failed - number of updated rows: " + n);
+			if (n != 1) {
+				throw new DatabaseException(
+						"update failed - number of updated rows: " + n);
 			}
-		}
-		catch(DatabaseException e)
-		{
+		} catch (DatabaseException e) {
 			throw e;
-		}
-		catch(SQLException e)
-		{
+		} catch (SQLException e) {
 			throw new DatabaseException(e);
 		}
 	}
 
-    @Override
-    public void delete(User user) throws DatabaseException {
-    	try
-		{
+	@Override
+	public void delete(User user) throws DatabaseException {
+		try {
 			Connection connection = this.connectionFactory.createConnection();
-			PreparedStatement statement = connection.prepareStatement(this.DELETE_QUERY);
+			PreparedStatement statement = connection
+					.prepareStatement(this.DELETE_QUERY);
 			statement.setLong(1, new Long(user.getId()));
 			int n = statement.executeUpdate();
-			if(n != 1)
-			{
-				throw new DatabaseException("delete failed - number of deleted rows: " + n);
+			if (n != 1) {
+				throw new DatabaseException(
+						"delete failed - number of deleted rows: " + n);
 			}
-		}
-		catch(DatabaseException e)
-		{
+		} catch (DatabaseException e) {
 			throw e;
-		}
-		catch(SQLException e)
-		{
+		} catch (SQLException e) {
 			throw new DatabaseException(e);
 		}
 	}
-    
-    @Override
-    public User find(Long id) throws DatabaseException {
-    	User user = new User();
-		try
-		{
+
+	@Override
+	public User find(Long id) throws DatabaseException {
+		User user = new User();
+		try {
 			Connection connection = this.connectionFactory.createConnection();
-			PreparedStatement statement = connection.prepareStatement(this.SELECT_QUERY);
+			PreparedStatement statement = connection
+					.prepareStatement(this.SELECT_QUERY);
 			statement.setLong(1, new Long(id));
 			ResultSet resultSet = statement.executeQuery();
-			while(resultSet.next())
-			{
+			while (resultSet.next()) {
 				user.setId(new Long(resultSet.getLong(1)));
 				user.setFirstName(resultSet.getString(2));
 				user.setLastName(resultSet.getString(3));
 				user.setDateOfBirthd(resultSet.getDate(4));
 			}
-		}
-		catch(DatabaseException e)
-		{
+		} catch (DatabaseException e) {
 			throw e;
-		}
-		catch(SQLException e)
-		{
+		} catch (SQLException e) {
 			throw new DatabaseException(e);
 		}
 		return user;
-    }
+	}
 
 	public Collection findAll() throws DatabaseException {
 		Collection result = new LinkedList();
-		
+
 		try {
 			Connection connection = connectionFactory.createConnection();
 			Statement statement = connection.createStatement();
