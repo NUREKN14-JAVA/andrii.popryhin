@@ -5,6 +5,7 @@ import java.util.Collection;
 import kn145.poprygin.User;
 
 public interface UserDao {
+
 	User create(User user) throws DatabaseException;
 
 	void update(User user) throws DatabaseException;
@@ -16,4 +17,5 @@ public interface UserDao {
 	Collection findAll() throws DatabaseException;
 
 	void setConnectionFactory(ConnectionFactory connectionFactory);
+
 }
