@@ -28,7 +28,6 @@ public class ConnectionFactoryImpl implements ConnectionFactory {
 		this.password = properties.getProperty("connection.password");
 	}
 
-	@Override
 	public Connection createConnection() throws DatabaseException {
 
 		try {

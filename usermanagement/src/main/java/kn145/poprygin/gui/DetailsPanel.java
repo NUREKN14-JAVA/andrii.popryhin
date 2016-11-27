@@ -91,7 +91,6 @@ public class DetailsPanel extends StandardPanel implements ActionListener {
 		return lastNameValueLabel;
 	}
 
-	@Override
 	public void actionPerformed(ActionEvent e) {
 		if ("ok".equals(e.getActionCommand())) {
 			this.setVisible(false);

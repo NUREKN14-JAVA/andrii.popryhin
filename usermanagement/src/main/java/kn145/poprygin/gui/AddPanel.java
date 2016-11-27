@@ -112,7 +112,7 @@ public class AddPanel extends StandardPanel implements ActionListener {
 		panel.add(textField);
 	}
 
-	@Override
+
 	public void actionPerformed(ActionEvent e) {
 		if ("ok".equals(e.getActionCommand())) {
 			User user = new User();
